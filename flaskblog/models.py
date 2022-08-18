@@ -2,6 +2,7 @@ from datetime import datetime
 from flaskblog import db, login_manager
 from flask_login import UserMixin
 
+# This function is used to manage user login
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -15,6 +16,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(60), nullable=False)
     posts = db.relationship('Post', backref='author', lazy=True)
 
+    #This is the representation of a User 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.image_file}')"
 
@@ -27,5 +29,6 @@ class Post(db.Model):
     content = db.Column(db.Text(20), nullable=False)
     user_id =  db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
+    # This is the representation of a post
     def __repr__(self):
         return f"Post('{self.title}', '{self.date_posted}')"
