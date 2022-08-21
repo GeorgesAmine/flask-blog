@@ -47,7 +47,7 @@ def register():
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('home'))
-    # Creating from based on imported LoginForm
+    # Creating form based on imported LoginForm
     form = LoginForm()
     if form.validate_on_submit():
         # if valid entries then check for authorised access
