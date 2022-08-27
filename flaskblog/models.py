@@ -1,6 +1,7 @@
 from datetime import datetime
-from flaskblog import db, login_manager
+from flaskblog import db, login_manager, app
 from flask_login import UserMixin
+from itsdangerous import TimedSerializer
 
 # This function is used to manage user login
 @login_manager.user_loader
@@ -15,6 +16,19 @@ class User(db.Model, UserMixin):
     image_file = db.Column(db.String(20), nullable=False, default='default.png')
     password = db.Column(db.String(60), nullable=False)
     posts = db.relationship('Post', backref='author', lazy=True)
+
+    def get_reset_token(self):
+        s = TimedSerializer(app.config['SECRET_KEY'],'confirmation')
+        return s.dumps(self.id)
+
+    @staticmethod
+    def verify_reset_token(token, max_age=1800):
+        s = TimedSerializer(app.config['SECRET_KEY'],'confirmation')
+        try:
+            user_id = s.loads(token, max_age=max_age)
+        except:
+            return None
+        return User.query.get(user_id)
 
     #This is the representation of a User 
     def __repr__(self):
