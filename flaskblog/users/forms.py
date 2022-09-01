@@ -1,15 +1,11 @@
-'''
-In this module Registration and Login forms classes ar created
-Here fields and their validators are set
-This module is then imported to the main app file in order to 
-create instances of froms to be passed and rendered in html pages
-'''
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
-from flaskblog.models import User
+from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms.validators import (DataRequired, Length, Email,
+                                EqualTo, ValidationError)
 from flask_login import current_user
+from flaskblog.models import User
+
 
 # RgistrationForm class that inherits from FlaskForm
 class RegistrationForm(FlaskForm):
@@ -63,12 +59,6 @@ class UpdateAccountForm(FlaskForm):
             if user:
                 raise ValidationError('That email is taken. Please choose another one')
 
-# Create PostForm
-class PostForm(FlaskForm):
-    title = StringField('Title', validators=[DataRequired()])       
-    content = TextAreaField('Content', validators=[DataRequired()])
-    submit = SubmitField('Post')
-
 # Create 
 class RequestResetForm(FlaskForm):
     email = StringField('Email', 
@@ -84,4 +74,3 @@ class ResetPasswordForm(FlaskForm):
     confirm_password = PasswordField('Confirm Password',
                                      validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Reset Password')
-
